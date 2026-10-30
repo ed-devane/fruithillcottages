@@ -10,6 +10,13 @@
     });
   }
 
+  // Email links: build.py leaves the address in two parts to hide it from spam harvesters
+  Array.prototype.forEach.call(document.querySelectorAll('a.email'), function (a) {
+    var addr = a.getAttribute('data-u') + '@' + a.getAttribute('data-d');
+    a.href = 'mailto:' + addr;
+    if (a.hasAttribute('data-show')) a.textContent = addr;
+  });
+
   // Simple lightbox for the cottage galleries
   var items = Array.prototype.slice.call(document.querySelectorAll('.gallery-item'));
   if (!items.length) return;

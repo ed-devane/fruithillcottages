@@ -25,7 +25,10 @@ DIMS = {
     "kirbys-07": (1200, 1600), "kirbys-08": (2500, 3333),
 }
 
-EMAIL = "fruithill@gmail.com"
+# Email is stored in two parts and joined by assets/menu.js in the browser, so
+# the full address never appears in the HTML (or in this public file) for spam
+# harvesters to find.
+EMAIL_USER, EMAIL_DOMAIN = "fruithill", "gmail.com"
 PHONE_DISPLAY = "(+353) 51-388694"
 PHONE_TEL = "+35351388694"
 MOBILE_DISPLAY = "(+353) 87 9597474"
@@ -62,8 +65,14 @@ def framed_hero(name, alt, inner=""):
   </section>'''
 
 
-def mail(text=EMAIL):
-    return f'<a href="mailto:{EMAIL}">{text}</a>'
+def mail(text=None):
+    """Email link. Without JavaScript it reads "fruithill [at] gmail [dot] com"
+    and links to the contact page; menu.js swaps in the real address."""
+    show = text is None
+    if show:
+        text = f'{EMAIL_USER} [at] {EMAIL_DOMAIN.replace(".", " [dot] ")}'
+    return (f'<a class="email" href="/contact" data-u="{EMAIL_USER}" data-d="{EMAIL_DOMAIN}"'
+            f'{" data-show" if show else ""}>{text}</a>')
 
 
 HEADER = f'''<header class="site-header">
